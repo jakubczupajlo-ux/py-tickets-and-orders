@@ -59,8 +59,8 @@ class MovieSession(models.Model):
     )
 
     def __str__(self) -> str:
-        formatted_time = self.show_time.strftime("%Y-%m-%d %H:%M:%S")
-        return f"{self.movie.title} {formatted_time}"
+        formatted = self.show_time.strftime("%Y-%m-%d %H:%M:%S")
+        return f"{self.movie.title} {formatted}"
 
 
 class Order(models.Model):
@@ -128,4 +128,10 @@ class Ticket(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self) -> str:
-        formatted_time = self.movie_session.show_time.strftime(
+        formatted = self.movie_session.show_time.strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )
+        return (
+            f"{self.movie_session.movie.title} {formatted} "
+            f"(row: {self.row}, seat: {self.seat})"
+        )
