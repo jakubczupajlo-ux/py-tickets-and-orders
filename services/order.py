@@ -1,6 +1,9 @@
+from __future__ import annotations
+
+from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.db.models import QuerySet
-from django.contrib.auth import get_user_model
+
 from db.models import Order, Ticket
 
 User = get_user_model()
@@ -10,14 +13,13 @@ User = get_user_model()
 def create_order(
     tickets: list[dict],
     username: str,
-    date: str = None
+    date: str | None = None,
 ) -> None:
     user = User.objects.get(username=username)
-    # Inicjalizacja bez automatycznego zapisu
+
     order = Order(user=user)
     if date:
         order.created_at = date
-    # Tylko jeden save()
     order.save()
 
     for t_data in tickets:
@@ -25,11 +27,11 @@ def create_order(
             movie_session_id=t_data["movie_session"],
             order=order,
             row=t_data["row"],
-            seat=t_data["seat"]
+            seat=t_data["seat"],
         )
 
 
-def get_orders(username: str = None) -> QuerySet[Order]:
+def get_orders(username: str | None = None) -> QuerySet[Order]:
     queryset = Order.objects.all()
     if username:
         queryset = queryset.filter(user__username=username)
