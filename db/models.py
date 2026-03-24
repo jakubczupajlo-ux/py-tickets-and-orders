@@ -103,6 +103,10 @@ class Ticket(models.Model):
         ]
 
     def clean(self) -> None:
+        # Jeśli movie_session nie istnieje (np. migracje) — nie walidujemy
+        if not self.movie_session_id:
+            return
+
         hall = self.movie_session.cinema_hall
 
         if not (1 <= self.row <= hall.rows):
@@ -134,10 +138,5 @@ class Ticket(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self) -> str:
-        date_str = self.movie_session.show_time.strftime(
-            "%Y-%m-%d %H:%M:%S"
-        )
-        return (
-            f"{self.movie_session.movie.title} {date_str} "
-            f"(row: {self.row}, seat: {self.seat})"
-        )
+        date_str = self.movie_session.show_time.strftime("%Y-%m-%d %H:%M:%S")
+        return f"{self.movie_session.movie.title} {date_str} (row: {self.row}, seat: {self.seat})"
