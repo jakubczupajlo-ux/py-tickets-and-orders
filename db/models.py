@@ -59,10 +59,8 @@ class MovieSession(models.Model):
     )
 
     def __str__(self) -> str:
-        return (
-            f"{self.movie.title} "
-            f"{self.show_time.strftime('%Y-%m-%d %H:%M:%S')}"
-        )
+        formatted = self.show_time.strftime("%Y-%m-%d %H:%M:%S")
+        return f"{self.movie.title} {formatted}"
 
 
 class Order(models.Model):
@@ -103,10 +101,6 @@ class Ticket(models.Model):
         ]
 
     def clean(self) -> None:
-        # Jeśli movie_session nie istnieje (np. migracje) — nie walidujemy
-        if not self.movie_session_id:
-            return
-
         hall = self.movie_session.cinema_hall
 
         if not (1 <= self.row <= hall.rows):
@@ -127,7 +121,8 @@ class Ticket(models.Model):
                     "seat": [
                         (
                             "seat number must be in available range: "
-                            f"(1, seats_in_row): (1, {hall.seats_in_row})"
+                            f"(1, seats_in_row): "
+                            f"(1, {hall.seats_in_row})"
                         )
                     ]
                 }
@@ -138,5 +133,10 @@ class Ticket(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self) -> str:
-        date_str = self.movie_session.show_time.strftime("%Y-%m-%d %H:%M:%S")
-        return f"{self.movie_session.movie.title} {date_str} (row: {self.row}, seat: {self.seat})"
+        formatted = self.movie_session.show_time.strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )
+        return (
+            f"{self.movie_session.movie.title} {formatted} "
+            f"(row: {self.row}, seat: {self.seat})"
+        )
