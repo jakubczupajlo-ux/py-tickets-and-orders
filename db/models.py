@@ -75,7 +75,8 @@ class Order(models.Model):
         ordering = ["-created_at"]
 
     def __str__(self) -> str:
-        return self.created_at.strftime("%Y-%m-%d %H:%M:%S")
+        formatted = self.created_at.strftime("%Y-%m-%d %H:%M:%S")
+        return f"<Order: {formatted}>"
 
 
 class Ticket(models.Model):
@@ -137,6 +138,6 @@ class Ticket(models.Model):
             "%Y-%m-%d %H:%M:%S"
         )
         return (
-            f"{self.movie_session.movie.title} {formatted} "
-            f"(row: {self.row}, seat: {self.seat})"
+            f"<Ticket: {self.movie_session.movie.title} {formatted} "
+            f"(row: {self.row}, seat: {self.seat})>"
         )
