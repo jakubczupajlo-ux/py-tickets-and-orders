@@ -20,3 +20,7 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = "db.User"
 
 USE_TZ = False
+
+MIGRATION_MODULES = {
+    "db": None,
+}
