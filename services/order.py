@@ -23,15 +23,15 @@ def create_order(
     order.save()
 
     if date:
-        parsed = datetime.strptime(date, "%Y-%m-%d %H:%M")
-        Order.objects.filter(pk=order.pk).update(created_at=parsed)
+        parsed_date = datetime.strptime(date, "%Y-%m-%d %H:%M")
+        Order.objects.filter(pk=order.pk).update(created_at=parsed_date)
 
-    for t in tickets:
+    for ticket_data in tickets:
         Ticket.objects.create(
-            movie_session_id=t["movie_session"],
+            movie_session_id=ticket_data["movie_session"],
             order=order,
-            row=t["row"],
-            seat=t["seat"],
+            row=ticket_data["row"],
+            seat=ticket_data["seat"],
         )
 
 
