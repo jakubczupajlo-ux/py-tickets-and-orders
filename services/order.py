@@ -26,12 +26,12 @@ def create_order(
         parsed = datetime.strptime(date, "%Y-%m-%d %H:%M")
         Order.objects.filter(pk=order.pk).update(created_at=parsed)
 
-    for t_data in tickets:
+    for t in tickets:
         Ticket.objects.create(
-            movie_session_id=t_data["movie_session"],
+            movie_session_id=t["movie_session"],
             order=order,
-            row=t_data["row"],
-            seat=t_data["seat"],
+            row=t["row"],
+            seat=t["seat"],
         )
 
 
