@@ -4,7 +4,8 @@ from django.db import models
 
 
 class User(AbstractUser):
-    pass
+    first_name = models.CharField(max_length=150, blank=True, null=True)
+    last_name = models.CharField(max_length=150, blank=True, null=True)
 
 
 class Genre(models.Model):
@@ -24,7 +25,7 @@ class Actor(models.Model):
 
 class Movie(models.Model):
     title = models.CharField(max_length=255, db_index=True)
-    description = models.TextField(null=True, blank=True)
+    description = models.TextField(blank=True, null=True)
     actors = models.ManyToManyField(Actor, related_name="movies")
     genres = models.ManyToManyField(Genre, related_name="movies")
 
@@ -75,8 +76,7 @@ class Order(models.Model):
         ordering = ["-created_at"]
 
     def __str__(self) -> str:
-        formatted = self.created_at.strftime("%Y-%m-%d %H:%M:%S")
-        return f"<Order: {formatted}>"
+        return self.created_at.strftime("%Y-%m-%d %H:%M:%S")
 
 
 class Ticket(models.Model):
@@ -138,6 +138,6 @@ class Ticket(models.Model):
             "%Y-%m-%d %H:%M:%S"
         )
         return (
-            f"<Ticket: {self.movie_session.movie.title} {formatted} "
-            f"(row: {self.row}, seat: {self.seat})>"
+            f"{self.movie_session.movie.title} {formatted} "
+            f"(row: {self.row}, seat: {self.seat})"
         )
